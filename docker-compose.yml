@@ -1,0 +1,20 @@
+version: '3'
+services:
+  client:
+    build: qwx1337/blogchain-client
+    links:
+      - server
+    ports:
+      - 3000:3000
+  server:
+    image: qwx1337/blogchain-server
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_DRIVER: ${DATABASE_DRIVER}
+      SERVER_PORT: ${SERVER_PORT}
+      SERVER_HOSTЖ ${SERVER_HOST}
+    ports:
+      - 3001:3001 # в принципе можно и не открывать
