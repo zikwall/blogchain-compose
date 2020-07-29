@@ -15,6 +15,6 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_DRIVER: ${DATABASE_DRIVER}
       SERVER_PORT: ${SERVER_PORT}
-      SERVER_HOSTЖ ${SERVER_HOST}
+      SERVER_HOST: ${SERVER_HOST}
     ports:
       - 3001:3001 # в принципе можно и не открывать
