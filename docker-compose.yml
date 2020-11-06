@@ -2,13 +2,13 @@ version: '3'
 
 services:
   client:
-    image: qwx1337/blogchain-client
+    image: qwx1337/blogchain-client:latest
     links:
       - server
     ports:
       - 3000:3000
   server:
-    image: qwx1337/blogchain-server
+    image: qwx1337/blogchain-server:latest
     environment:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_NAME: ${DATABASE_NAME}

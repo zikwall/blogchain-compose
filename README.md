@@ -4,14 +4,14 @@
 
 #### Server
 
-- [x] `$ docker build -t qwx1337/blogchain-server .`
-- [x] `$ docker push qwx1337/blogchain-server`
+- [x] `$ docker build -t qwx1337/blogchain-server:latest .`
+- [x] `$ docker push qwx1337/blogchain-server:latest`
 - [x] see in `https://hub.docker.com/r/qwx1337/blogchain-server`
 
 #### Client
 
-- [x] `$ docker build -t qwx1337/blogchain-client .`
-- [x] `$ docker push qwx1337/blogchain-client`
+- [x] `$ docker build -t qwx1337/blogchain-client:latest .`
+- [x] `$ docker push qwx1337/blogchain-client:latest`
 - [x] see in `https://hub.docker.com/r/qwx1337/blogchain-client`
 
 ### Up
