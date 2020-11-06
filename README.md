@@ -20,6 +20,6 @@
 
 ### Visits
 
-- Grafana: `<host-ip>:3000`
+- Grafana: `<host-ip>:3002`
 - Prometheus: `<host-ip>:9090`
 - AlertManager: `<host-ip>:9093`
