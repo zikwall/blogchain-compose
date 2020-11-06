@@ -16,4 +16,10 @@
 
 ### Up
 
-- [x] `$ docker-compose up`
+- [x] `$ docker-compose up -d`
+
+### Visits
+
+- Grafana: `<host-ip>:3000`
+- Prometheus: `<host-ip>:9090`
+- AlertManager: `<host-ip>:9093`
