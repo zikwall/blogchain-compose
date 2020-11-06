@@ -33,8 +33,8 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     restart: unless-stopped
-    expose:
-      - 9090
+    ports:
+      - 9090:9090
     labels:
       org.label-schema.group: "monitoring"
   alertmanager:
@@ -46,8 +46,8 @@ services:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
     restart: unless-stopped
-    expose:
-      - 9093
+    ports:
+      - 9093:9093
     labels:
       org.label-schema.group: "monitoring"
   grafana:
@@ -61,8 +61,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
     restart: unless-stopped
-    expose:
-      - 3000
+    ports:
+      - 3000:3000
     labels:
       org.label-schema.group: "monitoring"
   nodeexporter:
