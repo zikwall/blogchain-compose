@@ -6,7 +6,7 @@ services:
     links:
       - server
     ports:
-      - 3002:3002
+      - 3000:3000
   server:
     image: qwx1337/blogchain-server
     environment:
@@ -54,6 +54,7 @@ services:
     image: grafana/grafana:7.3.1
     container_name: grafana
     volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
@@ -62,7 +63,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - 3002:3002
     labels:
       org.label-schema.group: "monitoring"
   nodeexporter:
