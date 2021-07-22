@@ -1,10 +1,13 @@
-version: '3'
+version: '3.4'
 
 services:
   client:
     image: qwx1337/blogchain-client:latest
     links:
       - server
+    environment:
+      CDN_HOST: ${CDN_HOST} 
+      API_HOST: ${API_HOST}
     ports:
       - 3000:3000
   server:
@@ -14,89 +17,37 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_USER: ${DATABASE_USER}
-      DATABASE_DRIVER: ${DATABASE_DRIVER}
+      DATABASE_DIALECT: ${DATABASE_DRIVER}
+      CLICKHOUSE_ADDRESS: ${CLICKHOUSE_ADDRESS}
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DATABASE: ${CLICKHOUSE_DATABASE}
+      CDN_HOST: ${CDN_HOST} 
+      CDN_USER: ${CDN_USER}
+      CDN_PASSWORD: ${CDN_PASSWORD}
+      BIND_SOCKET: ${BIND_SOCKET}
+      LISTENER: ${LISTENER}
       BIND_ADDRESS: ${BIND_ADDRESS}
       CONTAINER_SECRET: ${CONTAINER_SECRET}
     ports:
       - 3001:3001
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
+  fileserver:
+    image: qwx1337/go-fileserver:latest
     volumes:
-      - ./prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    restart: unless-stopped
-    ports:
-      - 9090:9090
-    labels:
-      org.label-schema.group: "monitoring"
-  alertmanager:
-    image: prom/alertmanager:latest
-    container_name: alertmanager
-    volumes:
-      - ./alertmanager:/etc/alertmanager
-    command:
-      - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
-    restart: unless-stopped
-    ports:
-      - 9093:9093
-    labels:
-      org.label-schema.group: "monitoring"
-  grafana:
-    image: grafana/grafana:7.3.1
-    container_name: grafana
-    volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - $HOME/tmp:/app/tmp
+      - $PWD:/mnt
+    links:
+      - server
+      - client
     environment:
-      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - GF_USERS_ALLOW_SIGN_UP=false
-    restart: unless-stopped
+      BIND_ADDRESS: '0.0.0.0:1338'
+      SECURE_TYPE: 1
+      USERS: ${FILESERVER_USERS}
+      ENABLE_SECURE: 'true'
+      ENABLE_TSL: 'true'
+      TSL_CERT_FILE: '/mnt/server.crt'
+      TSL_KEY_FILE: '/mnt/server.key'
     ports:
-      - 3002:3002
-    labels:
-      org.label-schema.group: "monitoring"
-  nodeexporter:
-    image: prom/node-exporter:latest
-    container_name: nodeexporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    restart: unless-stopped
-    expose:
-      - 9100
-    labels:
-      org.label-schema.group: "monitoring"
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.37.0
-    container_name: cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
-    restart: unless-stopped
-    expose:
-      - 8080
-    labels:
-      org.label-schema.group: "monitoring"
+      - 1338:1338
 volumes:
-  prometheus_data: {}
-  grafana_data: {}
+  
